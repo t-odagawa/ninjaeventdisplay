@@ -1,16 +1,11 @@
-message (STATUS "Event display...")
+message (STATUS "Event display Ninja Sharing file...")
 
 add_executable(EventDisplayNinjaSf
 	EventDisplayNinjaSf.cpp
-#	EventDisplayNinjaSf.hpp
 	)
 
 target_link_libraries(EventDisplayNinjaSf
-	${ROOT_LIBRARIES}
-	${Geant4_LIBRARIES}
 	${Boost_LIBRARIES}
-	${B2MC_LIBRARY}
-	${NTBM_LIBRARY}
 )
 
 # install the execute in the bin folder

@@ -1,4 +1,5 @@
 // system includes
+#include <iomanip>
 #include <fstream>
 #include <ctime>
 
@@ -6,11 +7,6 @@
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
-
-// B2 includes
-#include <B2Reader.hh>
-#include <B2SpillSummary.hh>
-#include <B2BeamSummary.hh>
 
 // Ninjasf includes
 // #include <Sharing_file.hpp>
@@ -69,7 +65,7 @@ int main (int argc, char *argv[]) {
 	  << std::setw(3) << std::setprecision(0) << month << " "
 	  << std::setw(3) << std::setprecision(0) << day << " "
 	  << std::setw(6) << std::setprecision(0) << t.entry_in_daily_file << " "
-	//<< std::setw(9) << std::setprecision(0) << t.group_id << " "
+	  << std::setw(9) << std::setprecision(0) << t.event_id << " "
 	  << std::endl;
       BOOST_LOG_TRIVIAL(debug) << "Corresponding entry : " << t.entry_in_daily_file;
     }

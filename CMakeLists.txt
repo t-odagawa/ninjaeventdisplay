@@ -67,23 +67,6 @@ endif()
 # where to look first for cmake modules
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-# ROOT
-list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
-find_package(ROOT 6.18 CONFIG REQUIRED)
-include(${ROOT_USE_FILE})
-message(STATUS "Found ROOT: ${ROOT_INCLUDE_DIRS}")
-
-# Geant4
-# for a nice description of how to include Geant4 in a CMake project
-# refer to this web page: http://www.sixiangguo.net/code/geant4/AppDevelop/apas02.html
-find_package(Geant4 REQUIRED)
-find_package(Geant4 REQUIRED COMPONENTS ui_tcsh)
-include(${Geant4_USE_FILE})
-message(STATUS "Found Geant4: ${Geant4_INCLUDE_DIRS}")
-if (${Geant4_ui_tcsh_FOUND})
-    message(STATUS "Found Geant4 UI tcsh: ${Geant4_ui_tcsh_FOUND}")
-endif ()
-
 # boost program_options, system, filesystem and log are required
 set(Boost_USE_STATIC_LIBS OFF)
 find_package(Boost 1.73 COMPONENTS system filesystem program_options unit_test_framework log_setup log REQUIRED)
@@ -93,51 +76,21 @@ if (Boost_FOUND)
     include_directories("${Boost_INCLUDE_DIRS}")
 endif()
 
-# B2MC library
-find_package(B2MC 0.1.10 REQUIRED)
-if (B2MC_FOUND)
-    message(STATUS "B2MC library -- found")
-    message(STATUS "B2MC library include dir : ${B2MC_INCLUDE_DIR}")
-    include_directories("${B2MC_INCLUDE_DIR}")
-endif ()
-
-# Event display library
-find_package(EventDisplay 0.0.5 REQUIRED)
-if (EVENT_DISPLAY_FOUND)
-    message(STATUS "Event display library -- found")
-    message(STATUS "Event display library include dir : ${EVENT_DISPLAY_INCLUDE_DIR}")
-    include_directories("${EVENT_DISPLAY_INCLUDE_DIR}")
-endif ()
-
-# NTBM library
-find_package(NTBM 0.0.1 REQUIRED)
-if (NTBM_FOUND)
-    message(STATUS "NTBM library -- found")
-    message(STATUS "NTBM library include dir : ${NTBM_INCLUDE_DIR}")
-    include_directories("${NTBM_INCLUDE_DIR}")
-endif ()
-
 ################ Libraries ################
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(NINJA_SF_EVEDIS_LIBRARIES "")
 if (NOT APPLE)
     list(APPEND NINJA_SF_EVEDIS_LIBRARIES
-            ${ROOT_LIBRARIES}
             ${Boost_LIBRARIES}
-            ${B2MC_LIBRARY}
-            ${EVENT_DISPLAY_LIBRARY}
             )
 else ()
     list(APPEND NINJA_SF_EVEDIS_LIBRARIES
-            ${ROOT_LIBRARIES}
             Boost::program_options
             Boost::system
             Boost::filesystem
             Boost::log_setup
             Boost::log
-            ${B2MC_LIBRARY}
-            ${EVENT_DISPLAY_LIBRARY}
             )
 endif ()
 
@@ -169,7 +122,7 @@ endif ()
 
 set(CMAKE_INSTALL_PPATH "${CMAKE_INSTALL_LIBDIR}")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set(NINJA_SF_EVEDIS_LIBRARIES ${ROOT_LIBRARIES} ${Boost_LIBRARIES} ${B2MC_LIBRARY} ${EVENT_DISPLAY_LIBRARY})
+set(NINJA_SF_EVEDIS_LIBRARIES ${Boost_LIBRARIES})
 
 ################ Sub Directories ################
 
