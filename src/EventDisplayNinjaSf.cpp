@@ -14,6 +14,7 @@ class Sharing_file {
 public :
   int32_t pl, ecc_id, fixedwall_id, trackerwall_id, spotid, zone[2], rawid[2], unix_time, tracker_track_id;
   int32_t entry_in_daily_file, event_id, track_type;
+  float chi2_shifter[3];
 };
 
 namespace logging = boost::log;
@@ -46,8 +47,10 @@ int main (int argc, char *argv[]) {
 
 #ifdef TEXT_MODE
     int32_t tmp;
+    float float_tmp;
     while (ifs >> t.pl >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
-	   >> t.unix_time >> tmp >> t.entry_in_daily_file >> t.event_id >> tmp) {
+	   >> t.unix_time >> tmp >> t.entry_in_daily_file 
+	   >> float_tmp >> float_tmp >> float_tmp >> t.event_id >> tmp) {
 #else
     while (ifs.read((char*)& t, sizeof(Sharing_file))) {
 #endif
