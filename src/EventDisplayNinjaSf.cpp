@@ -11,10 +11,20 @@
 // Ninjasf includes
 // #include <Sharing_file.hpp>
 class Sharing_file {
-public :
-  int32_t pl, ecc_id, fixedwall_id, trackerwall_id, spotid, zone[2], rawid[2], unix_time, tracker_track_id;
-  int32_t entry_in_daily_file, event_id, track_type;
+public:
+  int32_t pl, ecc_id, fixedwall_id, trackerwall_id, spotid, zone[2], rawid[2], unix_time, tracker_track_id, entry_in_daily_file, eventid, track_type;
   float chi2_shifter[3];
+  // spotid:spotA * 100 + spotB
+  // chi2_shifter : [0]:ECC-fixedwall [1]:fixedwall-TSS [2]:TSS-tracker
+  static bool sort_unix_time(const Sharing_file &lhs, const Sharing_file &rhs) {
+    if (lhs.unix_time == rhs.unix_time)return lhs.tracker_track_id < rhs.tracker_track_id;
+    return lhs.unix_time < rhs.unix_time;
+  }
+  static bool sort_eventid(const Sharing_file &lhs, const Sharing_file &rhs) {
+    if (lhs.eventid == rhs.eventid)return sort_unix_time(lhs, rhs);
+    //lhs.unix_time < rhs.unix_time;
+    return lhs.eventid < rhs.eventid;
+  }
 };
 
 namespace logging = boost::log;
@@ -68,7 +78,7 @@ int main (int argc, char *argv[]) {
 	  << std::setw(3) << std::setprecision(0) << month << " "
 	  << std::setw(3) << std::setprecision(0) << day << " "
 	  << std::setw(6) << std::setprecision(0) << t.entry_in_daily_file << " "
-	  << std::setw(9) << std::setprecision(0) << t.event_id << " "
+	  << std::setw(9) << std::setprecision(0) << t.eventid << " "
 	  << std::endl;
       BOOST_LOG_TRIVIAL(debug) << "Corresponding entry : " << t.entry_in_daily_file;
     }
