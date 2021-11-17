@@ -16,4 +16,4 @@ eventid=$5
 command=${HOME}/SharingFile/display/input/command.txt
 
 ./EventDisplay --input-file ${inputfile} --output-directory ${outputdir} --geometry-directory ${geometrydir} --start-event ${entry} -l pdf < ${command}
-mv ${outputdir}/event_display_${entry}.pdf ${outputdir}/event_display_${eventid}.pdf
+mv ${outputdir}/event_display_${entry}.pdf ${outputdir}/event_display/event_display_${eventid}.pdf
