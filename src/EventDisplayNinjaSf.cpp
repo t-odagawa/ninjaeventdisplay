@@ -72,7 +72,7 @@ int main (int argc, char *argv[]) {
       int month = tm_event->tm_mon + 1;
       int day = tm_event->tm_mday;
       BOOST_LOG_TRIVIAL(debug) << year << "-" << month << "-" << day;
-
+      if (t.eventid == -1) continue;
       ofs << std::right << std::fixed
 	  << std::setw(5) << std::setprecision(0) << year << " "
 	  << std::setw(3) << std::setprecision(0) << month << " "
