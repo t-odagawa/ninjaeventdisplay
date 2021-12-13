@@ -67,6 +67,12 @@ endif()
 # where to look first for cmake modules
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
+# ROOT
+list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
+find_package(ROOT 6.18 CONFIG REQUIRED)
+include(${ROOT_USE_FILE})
+message(STATUS "Found ROOT: ${ROOT_INCLUDE_DIRS}")
+
 # boost program_options, system, filesystem and log are required
 set(Boost_USE_STATIC_LIBS OFF)
 find_package(Boost 1.73 COMPONENTS system filesystem program_options unit_test_framework log_setup log REQUIRED)
@@ -76,21 +82,33 @@ if (Boost_FOUND)
     include_directories("${Boost_INCLUDE_DIRS}")
 endif()
 
+# NTBM libarary
+find_package(NTBM 0.0.1 REQUIRED)
+if (NTBM_FOUND)
+   message(STATUS "NTBM library -- found")
+   message(STATUS "NTBM library include dir : ${NTBM_INCLUDE_DIR}")
+   include_directories("${NTBM_INCLUDE_DIR}")
+endif ()
+
 ################ Libraries ################
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(NINJA_SF_EVEDIS_LIBRARIES "")
 if (NOT APPLE)
     list(APPEND NINJA_SF_EVEDIS_LIBRARIES
+    	    ${ROOT_LIBRARIES}
             ${Boost_LIBRARIES}
+	    ${NTBM_LIBRARY}
             )
 else ()
     list(APPEND NINJA_SF_EVEDIS_LIBRARIES
+    	    ${ROOT_LIBRARIES}
             Boost::program_options
             Boost::system
             Boost::filesystem
             Boost::log_setup
             Boost::log
+	    ${NTBM_LIBRARY}
             )
 endif ()
 
@@ -122,7 +140,7 @@ endif ()
 
 set(CMAKE_INSTALL_PPATH "${CMAKE_INSTALL_LIBDIR}")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set(NINJA_SF_EVEDIS_LIBRARIES ${Boost_LIBRARIES})
+set(NINJA_SF_EVEDIS_LIBRARIES ${ROOT_LIBRARIES} ${Boost_LIBRARIES} ${NTBM_LIBRARY})
 
 ################ Sub Directories ################
 

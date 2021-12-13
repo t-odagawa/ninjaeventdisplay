@@ -12,8 +12,10 @@
 // #include <Sharing_file.hpp>
 class Sharing_file {
 public:
-  int32_t pl, ecc_id, fixedwall_id, trackerwall_id, spotid, zone[2], rawid[2], unix_time, tracker_track_id, entry_in_daily_file, eventid, track_type;
-  float chi2_shifter[3];
+  int32_t pl, ecc_id, oss_id, fixedwall_id, trackerwall_id, spotid, zone[2], rawid[2];
+  int32_t unix_time, tracker_track_id, babymind_bunch, babymind_nplane, charge, entry_in_daily_file;
+  int32_t eventid, track_type, ecc_track_type;
+  float chi2_shifter[4], babymind_momentum;
   // spotid:spotA * 100 + spotB
   // chi2_shifter : [0]:ECC-fixedwall [1]:fixedwall-TSS [2]:TSS-tracker
   static bool sort_unix_time(const Sharing_file &lhs, const Sharing_file &rhs) {
@@ -58,9 +60,12 @@ int main (int argc, char *argv[]) {
 #ifdef TEXT_MODE
     int32_t tmp;
     float float_tmp;
-    while (ifs >> t.pl >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
-	   >> t.unix_time >> tmp >> t.entry_in_daily_file 
-	   >> float_tmp >> float_tmp >> float_tmp >> t.event_id >> tmp) {
+    while (ifs >> t.pl >> t.ecc_id >> t.oss_id >> t.fixedwall_id >> t.trackerwall_id
+	   >> t.spotid >> t.zone[0] >> t.rawid[0] >> t.zone[1] >> t.rawid[1]
+	   >> t.unix_time >> t.tracker_track_id >> t.babymind_bunch >> t.entry_in_daily_file
+	   >> t.babymind_nplane >> t.charge >> t.babymind_momentum
+	   >> t.chi2_shifter[0] >> t.chi2_shifter[1] >> t.chi2_shifter[2] >> t.chi2_shifter[3]
+	   >> t.eventid >> t.tracker_type >> t.ecc_track_type) {
 #else
     while (ifs.read((char*)& t, sizeof(Sharing_file))) {
 #endif
@@ -78,6 +83,7 @@ int main (int argc, char *argv[]) {
 	  << std::setw(3) << std::setprecision(0) << month << " "
 	  << std::setw(3) << std::setprecision(0) << day << " "
 	  << std::setw(6) << std::setprecision(0) << t.entry_in_daily_file << " "
+	  << std::setw(2) << std::setprecision(0) << t.babymind_bunch << " "
 	  << std::setw(9) << std::setprecision(0) << t.eventid << " "
 	  << std::endl;
       BOOST_LOG_TRIVIAL(debug) << "Corresponding entry : " << t.entry_in_daily_file;
